@@ -47,6 +47,17 @@ def plot_accuracy(history: dict[str, list[float]], offset = 0):
     ax.grid()
     return fig
 
+def plot_loss(history: dict[str, list[float]], offset = 0):
+    fig, ax = plt.subplots()
+    xs = np.arange(len(history['loss'])) + offset
+    ax.plot(xs, history['loss'])
+    ax.set_title('model loss')
+    ax.set_ylabel('loss')
+    ax.set_xlabel('epoch')
+    ax.legend(['train', 'validation'], loc='upper left')
+    ax.grid()
+    return fig
+
 def merge_histories(histories: list[History]):
     merged_history = {}
     for history in histories:

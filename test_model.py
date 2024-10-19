@@ -6,7 +6,7 @@ import numpy as np
 from utils import wordToSequence, german_characters
 
 # Load the saved model
-model = keras.models.load_model('models/model_lstm4.h5')
+model = keras.models.load_model('models/model_mlp.h5')
 
 # Constants
 max_characters = 7

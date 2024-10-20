@@ -6,6 +6,7 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 from functools import partial
+import pickle
 
 # Assuming these are in your utils.py file
 from utils import wordToSequence, generate_classification_labels, german_characters, split_data
@@ -37,19 +38,27 @@ dataset = load_data_from_csv('dataset.csv')
 dataset = preprocessing(dataset, max_characters)
 
 # Split the data
-_, _, _, _, test_x, test_y = split_data(dataset, ['sequence'], ['labels'], test_size=1, train_size=0, val_size=0)
+# _, _, _, _, test_x, test_y = split_data(dataset, ['sequence'], ['labels'], test_size=1, train_size=0, val_size=0)
 
-# Convert to arrays
-test_x = x_to_array(test_x, 'sequence')
-test_y = x_to_array(test_y, 'labels')
+# # Convert to arrays
+# test_x = x_to_array(test_x, 'sequence')
+# test_y = x_to_array(test_y, 'labels')
+
+def pickle_load(filename):
+    with open(filename, 'rb') as file:
+        return pickle.load(file)
+    
+x = pickle_load('val_x.pkl')
+y = pickle_load('val_y.pkl')
+
 
 # Load the trained model
-model = keras.models.load_model('models/model_lstm4.h5')
+model = keras.models.load_model('models/model_mlp.h5')
 
 # Make predictions
-y_pred = model.predict(test_x)
+y_pred = model.predict(x)
 y_pred_classes = np.argmax(y_pred, axis=1)
-y_true_classes = np.argmax(test_y, axis=1)
+y_true_classes = np.argmax(y, axis=1)
 
 # Generate confusion matrix
 cm = confusion_matrix(y_true_classes, y_pred_classes)
